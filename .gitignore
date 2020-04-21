@@ -1,0 +1,4 @@
+__pycache__/
+KafkaCLI/__pycache__/
+*.json
+topics/*.json
