@@ -1,4 +1,6 @@
 __pycache__/
 KafkaCLI/__pycache__/
+*.pyc
 *.json
 topics/*.json
+*.bak

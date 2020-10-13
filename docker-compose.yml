@@ -1,7 +1,7 @@
 version: '3'
 services:
   zookeeper:
-    image: "confluentinc/cp-zookeeper:5.3.0"
+    image: "confluentinc/cp-zookeeper:latest"
     environment:
       ZOOKEEPER_CLIENT_PORT: 2181
       ZOOKEEPER_TICK_TIME: 2000
@@ -11,11 +11,9 @@ services:
       - 2181
     networks:
       - kafkanet
-    extra_hosts:
-      - kafka:192.99.0.1
 
   kafka:
-    image: "confluentinc/cp-enterprise-kafka:5.3.0"
+    image: "confluentinc/cp-enterprise-kafka:latest"
     ports:
       - '39092:39092'
       - '9092:9092'
@@ -29,20 +27,19 @@ services:
       KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
       KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
       KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092,PLAINTEXT_HOST://localhost:39092
-#      KAFKA_ADVERTISED_PORT: 9092
+      #KAFKA_ADVERTISED_PORT: 9092
+      KAFKA_CREATE_TOPICS: "members.registration.v1:20:1:compact"
       KAFKA_AUTO_CREATE_TOPICS_ENABLE: "true"
       KAFKA_METRIC_REPORTERS: io.confluent.metrics.reporter.ConfluentMetricsReporter
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
       KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS: 100
       CONFLUENT_METRICS_REPORTER_BOOTSTRAP_SERVERS: kafka:9092
-      CONFLUENT_METRICS_REPORTER_ZOOKEEPER_CONNECT: zookeeper:32181
+      CONFLUENT_METRICS_REPORTER_ZOOKEEPER_CONNECT: zookeeper:2181
       CONFLUENT_METRICS_REPORTER_TOPIC_REPLICAS: 1
       CONFLUENT_METRICS_ENABLE: 'true'
       CONFLUENT_SUPPORT_CUSTOMER_ID: 'anonymous'
     networks:
       - kafkanet
-    extra_hosts:
-      - kafka:192.99.0.1
 
   schema-registry:
     image: "confluentinc/cp-schema-registry:5.3.0"
@@ -56,8 +53,6 @@ services:
       - 8081
     networks:
       - kafkanet
-    extra_hosts:
-      - kafka:192.99.0.1
 
   ksql-server:
     image: "confluentinc/cp-ksql-server:5.3.0"
@@ -78,5 +73,5 @@ networks:
   kafkanet:
     driver: bridge
     driver_opts:
-      subnet: 192.99.0.0/24
-      gateway: 192.99.0.1
+      subnet: 172.16.0.1/24
+      gateway: 172.16.0.1
