@@ -4,7 +4,8 @@ import sys
 import json
 import logging
 # from confluent_kafka.admin import AdminClient, NewTopic
-from KafkaCLI.client import KafkaAdminCli, Config, Error
+from KafkaCLI.client import KafkaAdminCli, Error
+from KafkaCLI.config import Config
 
 FORMAT = '%(asctime)-15s %(name)-5s %(levelname)-8s %(message)s'
 logging.basicConfig(format=FORMAT)
@@ -25,7 +26,7 @@ def command_line():
 
     parser = argparse.ArgumentParser(formatter_class=argparse.RawTextHelpFormatter
                                         ,description='Kafka CLi tools (requirement python 3.x)')
-    parser.add_argument('-v', action='version',version='%(aws-msk-cli)s ver {}'.format(__version__), 
+    parser.add_argument('-v', action='version',version='%(KPA)s ver {}'.format(__version__), 
             help='display app version')
     parser.add_argument('-b', dest='bootstrap', help='set bootstrap broker host', required=True)
     parser.add_argument('-lts', '--list_topics', action='store_true', dest='list_topics', 
